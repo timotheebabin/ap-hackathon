@@ -2,7 +2,7 @@ import flet as ft
 import random as rd
 import numpy as np
 import time
-import Taquin_resolution as rs
+import Taquin_résolution as rs
 
 # Cette fonction renvoie un bool indiquant si le board est atteignable.
 def is_reachable(given_board):
