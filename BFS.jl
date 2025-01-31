@@ -109,7 +109,11 @@ function trouve_chemin(map, start)
     path
 end
 
-map = bfs([1,2,3,4,5,6,7,8,0])
+#Parcours du graphe
+arrivee = [1,2,3,4,5,6,7,8,0]
+map = bfs(arrivee)
+
+#Tests
 using Test
 @test_broken trouve_chemin(map, [1,4,2,3,8,5,6,0,7]) #Nous avons vérifié que cette position n'est pas atteignable depuis l'arrivée grâce à la fonction is_reachable
 @test trouve_chemin(map, [1,2,3,4,5,0,7,8,6]) == [[1,2,3,4,5,0,7,8,6],[1,2,3,4,5,6,7,8,0]]
