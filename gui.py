@@ -1,10 +1,8 @@
 import flet as ft
 import random as rd
 import numpy as np
-import pygame as pg
 import time
-
-
+import Taquin_resolution as rs
 
 # Cette fonction renvoie un bool indiquant si le board est atteignable.
 def is_reachable(given_board):
@@ -91,14 +89,14 @@ class Board:
                     icon_color="red",
                     icon_size=50,
                     tooltip="Recommencer",
-                    on_click=self.reset_board(e)
+                    on_click=self.reset_board
                 ),
                 ft.IconButton(
                     icon=ft.Icons.LIGHTBULB,
                     icon_color="yellow",
                     icon_size=50,
-                    tooltip="Aide"
-                    on_click = self.display_solution(e)
+                    tooltip="Aide",
+                    on_click = self.display_solution
                 )
             ],
             alignment=ft.MainAxisAlignment.CENTER,
@@ -121,13 +119,13 @@ class Board:
         self.update_board()
 
     def display_solution(self, e):
-        solution = sol(self.board)
+        solution = rs.resolution(np.array(self.board).reshape(9))[0]
         for k in range(len(solution)):
             buttons = []
             for i in range(3):
                 row = []
                 for j in range(3):
-                    value = solution[0][k][i][j]
+                    value = solution[k][i][j]
                     if value == 0:
                         button = ft.ElevatedButton(text=" ", width=100, height=100)
                     else:
@@ -152,13 +150,11 @@ class Board:
                     icon=ft.Icons.REFRESH,
                     icon_color="red",
                     icon_size=50,
-                    tooltip="Recommencer"
                 ),
                 ft.IconButton(
                     icon=ft.Icons.LIGHTBULB,
                     icon_color="yellow",
                     icon_size=50,
-                    tooltip="Aide"
                 )
             ],
             alignment=ft.MainAxisAlignment.CENTER,
