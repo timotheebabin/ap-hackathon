@@ -15,20 +15,20 @@ function neighbors(summit, pos_zero)
     i,j = convertit_position_2D(pos_zero)
     voisins = Tuple{Vector{Int}, Int}[]
     if i < 3 
-        new_n = convertit_position_1D(new_i,new_j)
+        new_n = convertit_position_1D(i+1,j)
         push!(voisins, echange_sommets(copy(summit), pos_zero, new_n))
     end
     if j < 3 
-        new_n = convertit_position_1D(new_i,new_j)
-        push!(voisins, echange_sommets(copy(summit), pos_zero, (i,j+1)))
+        new_n = convertit_position_1D(i,j+1)
+        push!(voisins, echange_sommets(copy(summit), pos_zero, new_n))
     end
     if i > 1 
-        new_n = convertit_position_1D(new_i,new_j)
-        push!(voisins, echange_sommets(copy(summit), pos_zero, (i-1,j)))
+        new_n = convertit_position_1D(i-1,j)
+        push!(voisins, echange_sommets(copy(summit), pos_zero, new_n))
     end
     if j > 1 
-        new_n = convertit_position_1D(new_i,new_j)
-        push!(voisins, echange_sommets(copy(summit), pos_zero, (i,j-1)))
+        new_n = convertit_position_1D(i,j-1)
+        push!(voisins, echange_sommets(copy(summit), pos_zero, new_n))
     end
     voisins
 end
@@ -46,7 +46,7 @@ function bfs(goal)
     for voisin in neighbors(goal, 9)
         summit, _ = voisin
         push!(a_visiter, voisin) 
-        map[summit] = (1, start)
+        map[summit] = (1, goal)
     end
 
     #Etapes
@@ -55,7 +55,7 @@ function bfs(goal)
         (summit, pos_zero) = popfirst!(a_visiter)
         for voisin in neighbors(summit, pos_zero)
             s, _ = voisin
-                if not s in keys(map)
+                if ~(s in keys(map))
                     map[s] = (map[summit][1]+1, summit)
                     push!(a_visiter, voisin)
                 end
@@ -65,4 +65,11 @@ function bfs(goal)
 end
 
 function trouve_chemin(map, start)
+    summit = start
+    path = [transpose(reshape(start, (3,3)))]
+    while !iszero(map[summit][1])
+        summit = map[summit][2]
+        push!(path, transpose(reshape(summit, (3,3))))
+    end
+    path
 end
