@@ -34,42 +34,35 @@ function neighbors(summit, pos_zero)
 end
 
 
-
-
-function bfs(start, goal)
+function bfs(goal)
     #Initialisation de la carte des distances sous forme de dictionnaire.
-    map = Dict{Vector{Int}, Tuple{Int, Vector{Int}}}()
-    map[start]  = 0
+    map = Dict{Vector{Int}, Tuple{Int, Vector{Int}}}() 
+    #chaque valeur du dictionnaire est un tuple représentant la distance à l'arrivée et le prédécesseur dans le chemin
+    map[goal]  = (0, Int[]) #le sommet de départ n'a pas de parent 
 
 
-    #Initialisation de la file de priorité
-    tas = [start]
-    for summit in neighbors(start)
-        push!(tas, 1)
+    #Initialisation de la liste des sommets à visiter
+    a_visiter = Tuple{Vector{Int}, Int}[] #on met dans la file à visiter : le taquin, la position du zéro et son prédécesseur
+    for voisin in neighbors(goal, 9)
+        summit, _ = voisin
+        push!(a_visiter, voisin) 
+        map[summit] = (1, start)
     end
 
     #Etapes
-    summit = start
-    while summit != goal
-        
-        
-        #Sélection du k-ième sommet le plus proche de s0
-        (w,i) = pop!(tas)
-        while (length(tas.data) > 0) && (i in keys(map)) 
-            (w,i) = pop!(tas)
+    summit = goal
+    while !isempty(a_visiter)
+        (summit, pos_zero) = popfirst!(a_visiter)
+        for voisin in neighbors(summit, pos_zero)
+            s, _ = voisin
+                if not s in keys(map)
+                    map[s] = (map[summit][1]+1, summit)
+                    push!(a_visiter, voisin)
+                end
         end
-        map[i] = w
-
-        #Ajout de nouveaux chemins dans le tas.
-        for t in g.neighbors 
-            s, j, w_2 = t
-            if (s == i) && ~ (j in keys(map))
-                push!(tas, (w_2 + w, j))
-            end
-        end
-
-        k+=1
     end
-
     map
+end
+
+function trouve_chemin(map, start)
 end
