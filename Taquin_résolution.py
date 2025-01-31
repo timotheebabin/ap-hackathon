@@ -63,5 +63,6 @@ def resolution(depart) :
     positions_zeros = np.array(positions_zeros_julia)
     return chemin, positions_zeros
 
+#Tests 
 print(resolution([1,2,3,4,5,6,7,0,8]))
 print(len(resolution([8,6,7,5,0,1,3,2,4])[0]) -1 ) #C'est la longueur du chemin, qui correspond bien à celle sur l'énoncé
