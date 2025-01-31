@@ -1,6 +1,7 @@
 import flet as ft
 import random as rd
 import numpy as np
+import pygame as pg
 
 #Cette fonction renvoie un bool indiquant si le board est atteignable.
 def is_reachable(given_board):
