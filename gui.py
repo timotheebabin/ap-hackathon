@@ -103,11 +103,6 @@ class Board:
                 print(f"Déplacement de ({ex}, {ey}) vers ({i}, {j})")
                 self.move_piece(empty_pos, (i, j))  # Effectuer l'échange des pièces
                 self.update_board()  # Mettre à jour la grille après le mouvement
-
-                # Vérifier si le jeu est résolu
-                if self.is_solved():
-                    self.page.add(ft.Text("Vous avez gagné !", size=30))  # Afficher un message de victoire
-                    self.page.update()  # Mettre à jour l'affichage
         return move_piece  # Retourner la fonction de gestion de l'événement
 
 
