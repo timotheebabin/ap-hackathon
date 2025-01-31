@@ -1,6 +1,7 @@
 import flet as ft
 import random as rd
 import numpy as np
+import time
 
 
 # Cette fonction renvoie un bool indiquant si le board est atteignable.
@@ -88,13 +89,14 @@ class Board:
                     icon_color="red",
                     icon_size=50,
                     tooltip="Recommencer",
-                    on_click=self.reset_board
+                    on_click=self.reset_board(e)
                 ),
                 ft.IconButton(
                     icon=ft.Icons.LIGHTBULB,
                     icon_color="yellow",
                     icon_size=50,
                     tooltip="Aide"
+                    on_click = self.display_solution(e)
                 )
             ],
             alignment=ft.MainAxisAlignment.CENTER,
@@ -115,6 +117,54 @@ class Board:
     def reset_board(self, e):
         self.board = self.generate_board()
         self.update_board()
+
+    def display_solution(self, e):
+        solution = sol(self.board)
+        for k in range(len(solution)):
+            buttons = []
+            for i in range(3):
+                row = []
+                for j in range(3):
+                    value = solution[0][k][i][j]
+                    if value == 0:
+                        button = ft.ElevatedButton(text=" ", width=100, height=100)
+                    else:
+                        button = ft.ElevatedButton(
+                        text=str(value),
+                        width=100,
+                        height=100,
+                        bgcolor=ft.colors.BLUE_100
+                    )
+                    row.append(button)
+                buttons.append(row)
+            grid = ft.Column(controls=[ft.Row(controls=row) for row in buttons], spacing=5)
+            centered_grid = ft.Row(
+            controls=[grid],
+            alignment=ft.MainAxisAlignment.CENTER
+            )
+            self.page.controls.clear()
+            self.page.add(centered_grid)
+            icon_row = ft.Row(
+                controls=[
+                ft.IconButton(
+                    icon=ft.Icons.REFRESH,
+                    icon_color="red",
+                    icon_size=50,
+                    tooltip="Recommencer"
+                ),
+                ft.IconButton(
+                    icon=ft.Icons.LIGHTBULB,
+                    icon_color="yellow",
+                    icon_size=50,
+                    tooltip="Aide"
+                )
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+            spacing=20 
+            )
+            self.page.add(icon_row)
+            self.page.update()
+            time.sleep(0.5)
 
 
 def main(page: ft.Page):
