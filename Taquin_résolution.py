@@ -19,41 +19,36 @@ On a déplacé 2 de deux positions.
 
 BREF : on n'effectue JAMAIS une seule transposée (de signature -1), et toujours zéro ou deux (de signature 1)
 ... il suffit de caculer la signature de la permutation. Si c'est -1, unreachable, si c'est 1, reachable.
-
-Pour une démonstration rigoureuse, euh plus tard
 """
 
 #Cette fonction renvoie un bool indiquant si le board est atteignable.
 def is_reachable(given_board):
-    assert type(given_board) == np.ndarray or type(given_board)==list, "il faut un tableau numpy ou une liste"
+    assert type(given_board) == np.ndarray or type(given_board) == list, "il faut un tableau numpy ou une liste"
     #on commence par convertir tout cela en un tableau array linéaire de 8 cases
     board = np.array([0 for i in range(8)])
-    k=0
-    given_board2=given_board.copy() #pour éviter les effets colatéraux
-    if type(given_board2) == np.ndarray and given_board2.shape==(3,3) :
+    k = 0
+    given_board2 = given_board.copy() #pour éviter les effets colatéraux
+    if type(given_board2) == np.ndarray and given_board2.shape == (3,3) :
         given_board2.reshape(9)
     elif type(given_board2) == list :
-        given_board2=np.array(given_board2)
-    for i in range(9) :
+        given_board2 = np.array(given_board2)
+    for i in range(9):
         a = given_board2[i]
-        if a != 0 :
+        if a != 0:
             board[k] = a
             k += 1
     
     #maintenant, on calcule la signature
     #Pour épargner au code des calculs sur des floats, on préfère faire des batteries de test.
     epsilon = 1
-    for i in range(1,8) :
-        for j in range(i+1,9) :
+    for i in range(1, 8) :
+        for j in range(i+1, 9) :
             sigmai = board[i-1]
             sigmaj = board[j-1]
             if ((i<j and sigmai>sigmaj) or (i>j and sigmai<sigmaj)):
                 epsilon *= (-1)
     #On conclut
-    if epsilon == 1:
-        return True
-    else :
-        return False
+    return epsilon == 1
     
 
 
@@ -63,8 +58,10 @@ jl.seval('using Revise ; include("BFS.jl")')
 
 def resolution(depart) :
     depart_julia = jl.Vector([depart[i] for i in range(len(depart))])
-    chemin_julia = jl.trouve_chemin(jl.map, depart_julia)
+    chemin_julia, positions_zeros_julia = jl.trouve_chemin(jl.map, depart_julia)
     chemin = [np.reshape(np.array(chemin_julia[i]), (3,3)) for i in range(jl.length(chemin_julia))]
-    return chemin
+    positions_zeros = np.array(positions_zeros_julia)
+    return chemin, positions_zeros
 
 print(resolution([1,2,3,4,5,6,7,0,8]))
+print(len(resolution([8,6,7,5,0,1,3,2,4])[0]) -1 ) #C'est la longueur du chemin, qui correspond bien à celle sur l'énoncé
