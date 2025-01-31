@@ -1,6 +1,7 @@
 from juliacall import Main as jl
 import numpy as np
 
+jl.seval('import Pkg; Pkg.add("Revise")') # pour importer des modules nécessaires à Julia
 
 #On stocke le taquin sous forme de liste ou de matrice pour la résolution.
 #On commence par déterminer si une position est atteignable ou non.
